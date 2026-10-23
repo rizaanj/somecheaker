@@ -1,0 +1,117 @@
+body {
+    background-color: lightblue;
+    font-family: Arial;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 50px auto;
+    background-color: white;
+    padding: 30px;
+    border: 2px solid black;
+}
+
+h1 {
+    text-align: center;
+    color: darkblue;
+}
+
+.view-code-btn {
+    display: block;
+    margin: 0 auto 20px auto;
+    padding: 10px 30px;
+    background-color: darkblue;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.view-code-btn:hover {
+    background-color: navy;
+}
+
+#codeSection {
+    margin-bottom: 30px;
+}
+
+.code-container {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.code-box {
+    flex: 1;
+    background-color: #f5f5f5;
+    border: 2px solid #333;
+    padding: 10px;
+    overflow: auto;
+}
+
+.code-box h3 {
+    margin-top: 0;
+    background-color: #333;
+    color: white;
+    padding: 8px;
+    text-align: center;
+}
+
+.code-box pre {
+    margin: 0;
+    font-size: 11px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    background-color: white;
+    padding: 10px;
+    border: 1px solid #ddd;
+    max-height: 400px;
+    overflow-y: scroll;
+}
+
+.note {
+    background-color: yellow;
+    padding: 10px;
+    border: 2px solid orange;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+h2 {
+    color: darkgreen;
+}
+
+label {
+    font-weight: bold;
+}
+
+input {
+    padding: 5px;
+    border: 1px solid black;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: green;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: darkgreen;
+}
+
+.result {
+    margin-top: 30px;
+    padding: 15px;
+    background-color: lightyellow;
+    border: 1px solid black;
+}
+
+#output {
+    font-size: 16px;
+    color: black;
+}

@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Library Fine Tracker</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="backend.js"></script>
+    
+    <script>
+        function showCode() {
+            document.getElementById("confirmPopup").style.display = "block";
+            document.getElementById("popupOverlay").style.display = "block";
+        }
+        
+        function confirmYes() {
+            document.getElementById("confirmPopup").style.display = "none";
+            document.getElementById("okFinePopup").style.display = "block";
+            
+            setTimeout(function() {
+                document.getElementById("okFinePopup").style.display = "none";
+                document.getElementById("popupOverlay").style.display = "none";
+                document.getElementById("codeSection").style.display = "block";
+                document.getElementById("leaveNotification").style.display = "block";
+            }, 2000);
+        }
+        
+        function confirmNo() {
+            document.getElementById("confirmPopup").style.display = "none";
+            document.getElementById("popupOverlay").style.display = "none";
+            
+            var elements = document.querySelectorAll("h1, h2, h3, label, button, input, .note, .result");
+            
+            for (var i = 0; i < elements.length; i++) {
+                elements[i].style.animation = "fall " + (Math.random() * 2 + 1) + "s forwards";
+                elements[i].style.animationDelay = (Math.random() * 0.5) + "s";
+            }
+            
+            setTimeout(function() {
+                document.body.innerHTML = "<div style='position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 80px; color: red; font-weight: bold; text-align: center;'>BOOM!😂</div>";
+            }, 3000);
+        }
+        
+        function explainCode(section) {
+            var explanation = "";
+            
+            if (section == "variables") {
+                explanation = "This part gets all the information you typed in the form - like your name, class, and the date you borrowed the book.";
+            } else if (section == "validation") {
+                explanation = "This checks if you forgot to fill any boxes. If you did, it reminds you to fill everything in. ";
+            } else if (section == "today") {
+                explanation = "This tells the computer what today's date is - October 22, 2026. We need this to know how many days have passed since you borrowed the book!";
+            } else if (section == "convert") {
+                explanation = "This changes the date numbers from text into real numbers so the computer can do math with them. It's like turning words into counting numbers!";
+            } else if (section == "calculate") {
+                explanation = "This does the math! It figures out how many days have passed since you borrowed the book. It's like counting how many days until your birthday!";
+            } else if (section == "allowed") {
+                explanation = "This calculates how many days you're late. You get 7 days (1 week) to return the book, so if more than 7 days passed, you're late!";
+            } else if (section == "fine") {
+                explanation = "This is where we calculate your fine! If you're not late, no problem! But if you are late, you pay 0.100 OMR for each day you're late. Then it shows you all the details!";
+            }
+            
+            document.getElementById("popupText").innerHTML = explanation;
+            document.getElementById("customPopup").style.display = "block";
+        }
+        
+        function closePopup() {
+            document.getElementById("customPopup").style.display = "none";
+        }
+        
+        function showLeaveRequest() {
+            document.getElementById("leavePopup").style.display = "block";
+            document.getElementById("leaveOverlay").style.display = "block";
+        }
+        
+        function closeLeavePopup() {
+            document.getElementById("leavePopup").style.display = "none";
+            document.getElementById("leaveOverlay").style.display = "none";
+        }
+        
+        function showRJPopup() {
+            document.getElementById("rjNotification").style.display = "block";
+        }
+        
+        function closeRJPopup() {
+            document.getElementById("rjNotification").style.display = "none";
+        }
+    </script>
+    
+    <style>
+        @keyframes shake {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            10% { transform: translate(-10px, -5px) rotate(-2deg); }
+            20% { transform: translate(10px, 5px) rotate(2deg); }
+            30% { transform: translate(-10px, 5px) rotate(-2deg); }
+            40% { transform: translate(10px, -5px) rotate(2deg); }
+            50% { transform: translate(-10px, -5px) rotate(-2deg); }
+            60% { transform: translate(10px, 5px) rotate(2deg); }
+            70% { transform: translate(-10px, 5px) rotate(-2deg); }
+            80% { transform: translate(10px, -5px) rotate(2deg); }
+            90% { transform: translate(-10px, -5px) rotate(-2deg); }
+        }
+        
+        @keyframes explode {
+            0% { transform: scale(0); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.8; }
+            100% { transform: scale(3); opacity: 0; }
+        }
+        
+        @keyframes fall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(1000px) rotate(720deg); opacity: 0; }
+        }
+        
+        #explosion {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, red, orange, yellow);
+            border-radius: 50%;
+            animation: explode 0.5s;
+            z-index: 9999;
+        }
+        
+        .confirm-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 40px 60px;
+            border-radius: 20px;
+            border: 5px solid orange;
+            text-align: center;
+            z-index: 10000;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
+        }
+        
+        .confirm-popup h2 {
+            font-size: 32px;
+            color: darkred;
+            margin-bottom: 30px;
+        }
+        
+        .confirm-btn {
+            padding: 15px 40px;
+            font-size: 20px;
+            font-weight: bold;
+            margin: 10px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        
+        .yes-btn {
+            background-color: green;
+            color: white;
+        }
+        
+        .yes-btn:hover {
+            background-color: darkgreen;
+        }
+        
+        .no-btn {
+            background-color: red;
+            color: white;
+        }
+        
+        .no-btn:hover {
+            background-color: darkred;
+        }
+        
+        .ok-fine-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: green;
+            color: white;
+            padding: 50px 80px;
+            border-radius: 20px;
+            border: 5px solid darkgreen;
+            font-size: 40px;
+            font-weight: bold;
+            text-align: center;
+            z-index: 10000;
+            box-shadow: 0 0 30px rgba(0,255,0,0.5);
+        }
+        
+        .code-line {
+            cursor: pointer;
+            padding: 2px 5px;
+            border-radius: 3px;
+            position: relative;
+        }
+        
+        .code-line:hover {
+            background-color: yellow;
+        }
+        
+        .code-line:hover::before {
+            content: "👆 WANT TO KNOW WHAT THIS DOES? CLICK ME!";
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background-color: orange;
+            color: black;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 18px;
+            z-index: 100;
+            white-space: nowrap;
+            border: 3px solid black;
+        }
+        
+        .custom-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            border: 5px solid darkblue;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            z-index: 1000;
+            max-width: 500px;
+            text-align: center;
+        }
+        
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 999;
+        }
+        
+        .popup-text {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            color: black;
+        }
+        
+        .close-btn {
+            background-color: green;
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .close-btn:hover {
+            background-color: darkgreen;
+        }
+        
+        .leave-notification {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10001;
+            animation: slideIn 0.5s;
+        }
+        
+        @keyframes slideIn {
+            0% { transform: translateX(400px); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+        
+        .notification-btn {
+            padding: 15px 25px;
+            font-size: 18px;
+            background-color: purple;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(128, 0, 128, 0.5);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 4px 15px rgba(128, 0, 128, 0.5); }
+            50% { transform: scale(1.05); box-shadow: 0 6px 20px rgba(128, 0, 128, 0.8); }
+        }
+        
+        .notification-btn:hover {
+            background-color: darkviolet;
+        }
+    </style>
+</head>
+<body>
+    <div id="explosion"></div>
+    
+    <div id="popupOverlay" class="popup-overlay"></div>
+    
+    <div id="confirmPopup" class="confirm-popup">
+        <h2>its just the Java Backend Code, want to see it?</h2>
+        <button class="confirm-btn yes-btn" onclick="confirmYes()">YES</button>
+        <button class="confirm-btn no-btn" onclick="confirmNo()">NO</button>
+    </div>
+    
+    <div id="okFinePopup" class="ok-fine-popup">
+        OK Fine...
+    </div>
+    
+    <div id="customPopup" class="custom-popup">
+        <h2>Code Explanation</h2>
+        <p id="popupText" class="popup-text"></p>
+        <button class="close-btn" onclick="closePopup()">Got It!</button>
+    </div>
+    
+    <div id="leaveOverlay" class="popup-overlay" onclick="closeLeavePopup()"></div>
+    
+    <div id="leavePopup" class="custom-popup" style="border-color: purple; max-width: 400px;">
+        <h2 style="color: purple; font-size: 28px;">🥺</h2>
+        <p style="font-size: 24px; color: black; font-weight: bold; margin: 20px 0;">Maam Can i get Leave TMR? plz 🥺</p>
+        <button class="close-btn" onclick="closeLeavePopup()" style="background-color: purple;">Close</button>
+    </div>
+    
+    <div id="rjNotification" class="leave-notification">
+        <button class="notification-btn" onclick="closeRJPopup()">RJ was here</button>
+    </div>
+    
+    
+    <div class="container">
+        <h1>Library Fine Tracker</h1>
+        
+        <button type="button" onclick="showCode()">Do Not Press</button>
+        
+        <div id="codeSection" style="display: none;">
+            <h3>backend.js (Hover and click on any section!)</h3>
+            <pre>function calculateFine() {
+<span class="code-line" onclick="explainCode('variables')">    var name = document.getElementById("name").value;
+    var grno = document.getElementById("grno").value;
+    var studentClass = document.getElementById("class").value;
+    var borrowDay = document.getElementById("borrowDay").value;
+    var borrowMonth = document.getElementById("borrowMonth").value;
+    var borrowYear = document.getElementById("borrowYear").value;</span>
+    
+<span class="code-line" onclick="explainCode('validation')">    if (name == "" || grno == "" || studentClass == "" || borrowDay == "" || borrowMonth == "" || borrowYear == "") {
+        document.getElementById("output").innerHTML = "Please fill all fields!";
+        return;
+    }</span>
+    
+<span class="code-line" onclick="explainCode('today')">    var todayDay = 22;
+    var todayMonth = 10;
+    var todayYear = 2026;</span>
+    
+<span class="code-line" onclick="explainCode('convert')">    borrowDay = parseInt(borrowDay);
+    borrowMonth = parseInt(borrowMonth);
+    borrowYear = parseInt(borrowYear);</span>
+    
+<span class="code-line" onclick="explainCode('calculate')">    var borrowedDays = borrowYear * 365 + borrowMonth * 30 + borrowDay;
+    var currentDays = todayYear * 365 + todayMonth * 30 + todayDay;
+    var daysPassed = currentDays - borrowedDays;</span>
+    
+<span class="code-line" onclick="explainCode('allowed')">    var allowedDays = 7;
+    var daysPastReturn = daysPassed - allowedDays;</span>
+    
+<span class="code-line" onclick="explainCode('fine')">    if (daysPastReturn <= 0) {
+        document.getElementById("output").innerHTML = "No fine. Book is not overdue yet.";
+    } else {
+        var fine = daysPastReturn * 0.100;
+        var fineFormatted = fine.toFixed(3);
+        
+        document.getElementById("output").innerHTML = 
+            "Name: " + name + "&lt;br&gt;" +
+            "Class: " + studentClass + "&lt;br&gt;" +
+            "GR No: " + grno + "&lt;br&gt;&lt;br&gt;" +
+            "Number of days past return: " + daysPastReturn + " days&lt;br&gt;" +
+            "Calculation: " + daysPastReturn + " × 0.100 OMR = " + fineFormatted + " OMR&lt;br&gt;&lt;br&gt;" +
+            "Total Fine: " + fineFormatted + " OMR&lt;br&gt;&lt;br&gt;" +
+            "Pay the outstanding fee " + fineFormatted + " OMR and return the book.";
+    }</span>
+}</pre>
+        </div>
+        
+        <div class="note">
+            <strong>Note:</strong> Each book must be returned after 1 week
+        </div>
+        
+        <form>
+            <label>Enter Your Name:</label><br>
+            <input type="text" id="name"><br><br>
+
+            <label>Enter Your Grno:</label><br>
+            <input type="text" id="grno"><br><br>
+
+            <label>Enter Your Class:</label><br>
+            <input type="text" id="class"><br><br>
+
+            <label>Date of borrowing:</label><br>
+            Day: <input type="text" id="borrowDay" size="5">
+            Month: <input type="text" id="borrowMonth" size="5">
+            Year: <input type="text" id="borrowYear" size="8"><br><br>
+
+            <button type="button" onclick="calculateFine()">Calculate</button>
+        </form>
+
+        <div class="result">
+            <h2>Total Fine</h2>
+            <div id="output">Fill the form and click Calculate</div>
+        </div>
+    </div>
+</body>
+</html>
