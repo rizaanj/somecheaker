@@ -42,20 +42,24 @@
         function explainCode(section) {
             var explanation = "";
             
-            if (section == "variables") {
-                explanation = "This part gets all the information you typed in the form - like your name, class, and the date you borrowed the book.";
-            } else if (section == "validation") {
-                explanation = "This checks if you forgot to fill any boxes. If you did, it reminds you to fill everything in. ";
+            if (section == "import") {
+                explanation = "This imports the Scanner class from Java's utility package. Scanner helps us read input from the keyboard!";
+            } else if (section == "class") {
+                explanation = "This creates a class named LibraryFine. In Java, every program must have at least one class!";
+            } else if (section == "main") {
+                explanation = "This is the main method - the starting point of every Java program. When you run the program, it starts here!";
+            } else if (section == "scanner") {
+                explanation = "This creates a Scanner object named 'sc' that will read what you type on the keyboard. System.in means it reads from keyboard input!";
+            } else if (section == "input") {
+                explanation = "These lines ask you to type the borrow date and read the numbers you enter using sc.nextInt(). The numbers are stored in variables!";
             } else if (section == "today") {
-                explanation = "This tells the computer what today's date is - October 22, 2026. We need this to know how many days have passed since you borrowed the book!";
-            } else if (section == "convert") {
-                explanation = "This changes the date numbers from text into real numbers so the computer can do math with them. It's like turning words into counting numbers!";
+                explanation = "This sets today's date - October 23, 2026. We need this to calculate how many days have passed since you borrowed the book!";
             } else if (section == "calculate") {
-                explanation = "This does the math! It figures out how many days have passed since you borrowed the book. It's like counting how many days until your birthday!";
-            } else if (section == "allowed") {
-                explanation = "This calculates how many days you're late. You get 7 days (1 week) to return the book, so if more than 7 days passed, you're late!";
-            } else if (section == "fine") {
-                explanation = "This is where we calculate your fine! If you're not late, no problem! But if you are late, you pay 0.100 OMR for each day you're late. Then it shows you all the details!";
+                explanation = "This does the math! It converts both dates to total days, then subtracts to find how many days have passed. Year×365 + Month×30 + Day gives total days!";
+            } else if (section == "late") {
+                explanation = "This calculates how many days late you are. You get 7 days to return the book, so it subtracts 7 from days passed!";
+            } else if (section == "ifelse") {
+                explanation = "This checks if you're late or not. If lateDays is 0 or negative, no fine! But if it's positive, it calculates the fine: lateDays × 100 baisa!";
             }
             
             document.getElementById("popupText").innerHTML = explanation;
@@ -343,50 +347,43 @@
         <button type="button" onclick="showCode()">Do Not Press</button>
         
         <div id="codeSection" style="display: none;">
-            <h3>backend.js (Hover and click on any section!)</h3>
-            <pre>function calculateFine() {
-<span class="code-line" onclick="explainCode('variables')">    var name = document.getElementById("name").value;
-    var grno = document.getElementById("grno").value;
-    var studentClass = document.getElementById("class").value;
-    var borrowDay = document.getElementById("borrowDay").value;
-    var borrowMonth = document.getElementById("borrowMonth").value;
-    var borrowYear = document.getElementById("borrowYear").value;</span>
-    
-<span class="code-line" onclick="explainCode('validation')">    if (name == "" || grno == "" || studentClass == "" || borrowDay == "" || borrowMonth == "" || borrowYear == "") {
-        document.getElementById("output").innerHTML = "Please fill all fields!";
-        return;
-    }</span>
-    
-<span class="code-line" onclick="explainCode('today')">    var todayDay = 22;
-    var todayMonth = 10;
-    var todayYear = 2026;</span>
-    
-<span class="code-line" onclick="explainCode('convert')">    borrowDay = parseInt(borrowDay);
-    borrowMonth = parseInt(borrowMonth);
-    borrowYear = parseInt(borrowYear);</span>
-    
-<span class="code-line" onclick="explainCode('calculate')">    var borrowedDays = borrowYear * 365 + borrowMonth * 30 + borrowDay;
-    var currentDays = todayYear * 365 + todayMonth * 30 + todayDay;
-    var daysPassed = currentDays - borrowedDays;</span>
-    
-<span class="code-line" onclick="explainCode('allowed')">    var allowedDays = 7;
-    var daysPastReturn = daysPassed - allowedDays;</span>
-    
-<span class="code-line" onclick="explainCode('fine')">    if (daysPastReturn <= 0) {
-        document.getElementById("output").innerHTML = "No fine. Book is not overdue yet.";
-    } else {
-        var fine = daysPastReturn * 0.100;
-        var fineFormatted = fine.toFixed(3);
+            <h3>LibraryFine.java (Hover and click on any section!)</h3>
+            <pre><span class="code-line" onclick="explainCode('import')">import java.util.Scanner;</span>
+
+<span class="code-line" onclick="explainCode('class')">class LibraryFine {</span>
+<span class="code-line" onclick="explainCode('main')">    public static void main(String args[]) {</span>
+<span class="code-line" onclick="explainCode('scanner')">        Scanner sc = new Scanner(System.in);</span>
         
-        document.getElementById("output").innerHTML = 
-            "Name: " + name + "&lt;br&gt;" +
-            "Class: " + studentClass + "&lt;br&gt;" +
-            "GR No: " + grno + "&lt;br&gt;&lt;br&gt;" +
-            "Number of days past return: " + daysPastReturn + " days&lt;br&gt;" +
-            "Calculation: " + daysPastReturn + " × 0.100 OMR = " + fineFormatted + " OMR&lt;br&gt;&lt;br&gt;" +
-            "Total Fine: " + fineFormatted + " OMR&lt;br&gt;&lt;br&gt;" +
-            "Pay the outstanding fee " + fineFormatted + " OMR and return the book.";
-    }</span>
+        System.out.println("Library Fine Calculator");
+        
+<span class="code-line" onclick="explainCode('input')">        System.out.print("Enter Borrow Day: ");
+        int borrowDay = sc.nextInt();
+        
+        System.out.print("Enter Borrow Month: ");
+        int borrowMonth = sc.nextInt();
+        
+        System.out.print("Enter Borrow Year: ");
+        int borrowYear = sc.nextInt();</span>
+        
+<span class="code-line" onclick="explainCode('today')">        int todayDay = 23;
+        int todayMonth = 10;
+        int todayYear = 2026;</span>
+        
+<span class="code-line" onclick="explainCode('calculate')">        int borrowedDays = borrowYear * 365 + borrowMonth * 30 + borrowDay;
+        int currentDays = todayYear * 365 + todayMonth * 30 + todayDay;
+        int daysPassed = currentDays - borrowedDays;</span>
+        
+<span class="code-line" onclick="explainCode('late')">        int allowedDays = 7;
+        int lateDays = daysPassed - allowedDays;</span>
+        
+<span class="code-line" onclick="explainCode('ifelse')">        if (lateDays &lt;= 0) {
+            System.out.println("No fine. Book not overdue.");
+        } else {
+            int fine = lateDays * 100;
+            System.out.println("Days late: " + lateDays);
+            System.out.println("Fine: " + fine + " baisa");
+        }</span>
+    }
 }</pre>
         </div>
         
